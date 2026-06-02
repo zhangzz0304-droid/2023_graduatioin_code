@@ -1,0 +1,45 @@
+### model
+model_name_or_path: /root/autodl-tmp/Ace_model/base/ace_1.5b
+trust_remote_code: true
+
+### method
+stage: dpo
+do_train: true
+finetuning_type: full
+deepspeed: examples/deepspeed/ds_z0_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
+pref_beta: 0.1
+pref_loss: sigmoid  # choices: [sigmoid (dpo), orpo, simpo]
+pref_ftx: 0.2
+
+### dataset
+dataset: dpo_1.5b
+template: qwen
+cutoff_len: 2200
+max_samples: 60000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: /root/autodl-tmp/Ace_model/base/dadpo/qwen_1.5b_14b_dadpo_lr8e-7_beta10.1_beta20.01_pref0.5
+logging_steps: 5
+save_steps: 0.5
+# save_strategy: epoch
+save_only_model: true
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 4
+learning_rate: 8.0e-7
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.05
+bf16: true
+ddp_timeout: 180000000
+
+# #@# eval
+# val_size: 0.01
+# per_device_eval_batch_size: 2
+# eval_strategy: steps
+# eval_steps: 50
